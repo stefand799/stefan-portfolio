@@ -17,9 +17,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Ionel-Ștefan Dinu — Software Developer",
+  title: "Ștefan Dinu — Software Developer",
   description:
-    "Personal portfolio of Ionel-Ștefan Dinu, a software developer from Brașov, România.",
+    "Personal portfolio of Ștefan Dinu, a software developer from Brașov, România.",
 };
 
 export default function RootLayout({
