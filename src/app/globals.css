@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-jetbrains-mono);
+  --animate-blink: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+:root {
+  --color-bg: #F5F2EB;
+  --color-fg: #1A1A1A;
+  --color-muted: #6B6B6B;
+  --color-border: #D4D0C8;
+  --color-prompt: #4A7C59;
+}
+
+.dark {
+  --color-bg: #111111;
+  --color-fg: #F0EDE4;
+  --color-muted: #888888;
+  --color-border: #252525;
+  --color-prompt: #5A9E6F;
+}
+
+html {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* MDX content styles */
+.prose-terminal p {
+  color: var(--color-muted);
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.prose-terminal h2 {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 700;
+  color: var(--color-fg);
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.prose-terminal h3 {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 600;
+  color: var(--color-fg);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose-terminal ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+}
+
+.prose-terminal li {
+  margin-bottom: 0.35rem;
+  line-height: 1.6;
+}
+
+.prose-terminal code {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.875rem;
+  background: rgba(26, 26, 26, 0.06);
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+}
+
+.dark .prose-terminal code {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.prose-terminal pre {
+  background: rgba(26, 26, 26, 0.04);
+  border: 1px solid var(--color-border);
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.prose-terminal pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose-terminal a {
+  color: var(--color-fg);
+  text-decoration: underline;
+}
+
+.prose-terminal strong {
+  color: var(--color-fg);
+  font-weight: 600;
+}
