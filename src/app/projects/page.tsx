@@ -4,7 +4,7 @@ import { ProjectCard } from "@/components/ui/ProjectCard";
 import { getProjects } from "@/lib/mdx";
 
 export const metadata: Metadata = {
-  title: "Projects — Ionel-Ștefan Dinu",
+  title: "Projects",
 };
 
 export default function ProjectsPage() {

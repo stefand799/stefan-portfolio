@@ -17,7 +17,10 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Ștefan Dinu — Software Developer",
+  title: {
+    default: "Ștefan D.",
+    template: "%s — Ștefan D.",
+  },
   description:
     "Personal portfolio of Ștefan Dinu, a software developer from Brașov, România.",
 };
@@ -31,6 +34,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${jetbrainsMono.variable} ${dmSans.variable}`}
+      // The inline theme script adds "dark" to <html> before React hydrates,
+      // so its className differs from the server HTML on purpose.
+      suppressHydrationWarning
     >
       <head>
         <script

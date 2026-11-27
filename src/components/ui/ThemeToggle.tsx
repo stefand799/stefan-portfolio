@@ -23,7 +23,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="font-mono text-xs transition-colors hover:underline"
+      className="font-mono text-xs whitespace-nowrap transition-colors hover:underline"
       style={{ color: "var(--color-muted)" }}
       aria-label="Toggle theme"
     >

@@ -1,38 +1,25 @@
 import type { Metadata } from "next";
 import { CommandPrompt } from "@/components/ui/CommandPrompt";
-import { TechTag } from "@/components/ui/TechTag";
+import Link from "next/link";
+import { SoupBowl } from "@/components/ui/SoupBowl";
 
 export const metadata: Metadata = {
-  title: "About — Ionel-Ștefan Dinu",
+  title: "About",
 };
 
-const education = [
-  {
-    institution: "University of Transilvania Brașov",
-    detail: "Faculty of Mathematics and Computer Science",
-    period: "2023 – 2026",
-    website: "https://mateinfo.unitbv.ro/ro/",
-  },
-  {
-    institution: '"Alexandru Marghiloman" Theoretical High School',
-    detail: "Computer Science Specialization",
-    period: "2019 – 2023",
-    website: "https://www.licmarghilomanbz.ro/index.php/ro/",
-  },
-];
+// "Now" section. Set SHOW_NOW to false to hide it.
+const SHOW_NOW = true;
 
-const softSkills = [
-  "Problem Solving",
-  "Analytical Thinking",
-  "Continuous Learning",
-  "Research",
-  "Teaching",
-  "Attention to Detail",
+const now = [
+  { text: "Building apps with AI algorithms and agents at Siemens.", href: "/experience" },
+  { text: "Starting a master's in automation and information technologies.", href: "/education" },
+  { text: "Teaching programming to high school students.", href: "/experience" },
+  { text: "Writing down the absurd ideas, before they escape.", href: "/blog" },
 ];
 
 export default function AboutPage() {
   return (
-    <div className="py-16">
+    <div className="py-16 about-text">
       <p className="mb-2">
         <CommandPrompt>cat about.txt</CommandPrompt>
       </p>
@@ -47,120 +34,108 @@ export default function AboutPage() {
         <section>
           <div className="space-y-4 max-w-2xl">
             <p className="leading-relaxed" style={{ color: "var(--color-muted)" }}>
-              I&apos;m a Computer Science student at the University of Transilvania
-              Brașov, passionate about building software that makes a difference.
-              My background spans front-end development, back-end systems, and
-              cross-platform applications.
+              I won&apos;t do the usual presentation. I&apos;ve been a person, a
+              student, a teacher, a dumbass, a genius. And now I&apos;m <strong>a thought
+              in your head</strong>. Glad you have enough space up here.
             </p>
             <p className="leading-relaxed" style={{ color: "var(--color-muted)" }}>
-              I believe knowledge is both a tool for success and a responsibility,
-              so I aim to use it wisely and creatively. I thrive on
-              problem-solving, continuous learning, and building solutions from
-              the ground up.
+              I hope that from here on, this feels more like <strong>a nice chat</strong> than a
+              reading session.
             </p>
           </div>
         </section>
 
         <section>
-          <h2
-            className="font-mono text-xl font-bold mb-6 pb-4"
-            style={{
-              color: "var(--color-fg)",
-              borderBottom: "1px solid var(--color-border)",
-            }}
-          >
-            Research Interests
-          </h2>
           <div className="space-y-4 max-w-2xl">
             <p className="leading-relaxed" style={{ color: "var(--color-muted)" }}>
-              Independent researcher with interest in discrete mathematics and
-              AI architectures inspired by neuroscience.
+              I couldn&apos;t say there are things I like or dislike, rather
+              things that feel <strong>aligned and right</strong>. From a young age I <strong>asked
+              questions</strong> and usually tried to come up with answers from the
+              limited knowledge I had gathered so far, sometimes false, or not
+              entirely true.
+            </p>
+            <p
+              className="leading-relaxed pl-4"
+              style={{
+                color: "var(--color-muted)",
+                borderLeft: "2px solid var(--color-border)",
+              }}
+            >
+              <strong>At 10</strong>, I tried to explain days and years. We live on a planet
+              that spins and also goes around the Sun. Days are short and
+              seasons are long, so the spin must be the <strong>day-night cycle</strong>: the
+              side not facing the Sun is simply dark. For the temperature
+              difference along the year, I guessed the orbit might not be
+              {" "}<strong>quite a circle</strong>, so at some point we are farther away and it gets
+              colder. Brutal and incomplete, of course. The orbit really is a
+              slight ellipse, but distance isn&apos;t what makes the seasons.
+              It&apos;s the <strong>tilt of the Earth&apos;s axis</strong>, which also explains
+              why days and nights change length along the year, something I
+              completely forgot about. Still, I remember that kid&apos;s reasoning,
+              and I still find it quite impressive.
             </p>
             <p className="leading-relaxed" style={{ color: "var(--color-muted)" }}>
-              On the mathematics side, I work on discrete dynamical systems over
-              integers — operators with emergent properties such as fixed points,
-              cycles, attraction basins, and power-law distributions. I explore
-              positional representations and associated polynomial structures,
-              with a focus on iterative behavior and invariants that arise
-              organically from elementary arithmetic.
+              Along the years I found <strong>exact sciences</strong> interesting, and
+              literature and reading annoying. Then, eventually, I found math
+              complicated and quite annoying too. But along the way I found
+              {" "}<strong>relations between sciences</strong>, turning into some kind of solution.
             </p>
             <p className="leading-relaxed" style={{ color: "var(--color-muted)" }}>
-              On the AI side, I&apos;m interested in architectures that move away
-              from the classical gradient-based and probabilistic paradigm —
-              systems that learn through deterministic addressing, associative
-              memory, and sparse representations. Theoretical influences draw
-              from computational neuroscience, particularly theories of
-              hierarchical information processing in the cortex and the
-              principle of a universal algorithm operating at different scales
-              of abstraction.
+              Take <strong>e</strong>. In math it comes out of pure counting, a sum
+              of fractions of permutations: 1 + 1/1! + 1/2! + 1/3! + … Nothing
+              about the world in it. And yet the same number shows up when you
+              measure the world: in how radioactive atoms decay, how a cup of
+              tea cools down, how a colony of bacteria grows.{" "}
+              <strong>Nobody put it there. It just keeps appearing.</strong>
             </p>
             <p className="leading-relaxed" style={{ color: "var(--color-muted)" }}>
-              The connection between the two directions — how discrete
-              mathematical structures can ground mechanisms of learning and
-              generalization — is the central question that unites them.
+              Don&apos;t you find it weird that professors tried so hard to teach
+              you about it? Each time you got annoyed, but never asked why. I
+              mean, for real? And that is just one of the examples.
             </p>
+            <p className="leading-relaxed" style={{ color: "var(--color-muted)" }}>
+              And now, at this age, I keep finding things like that. Even
+              literature and languages turn out to be just{" "}
+              <strong>the same principles</strong>.
+            </p>
+            <p className="leading-relaxed italic" style={{ color: "var(--color-muted)" }}>
+              Ah, how cliché it sounds, but Socrates wasn&apos;t wrong when he
+              said: <strong>&ldquo;I know that I know nothing.&rdquo;</strong>
+            </p>
+            <p className="leading-relaxed" style={{ color: "var(--color-muted)" }}>
+              It&apos;s like <strong>everything dissolved into one</strong>:
+              comforting, but so vast that it&apos;s hard to digest.
+            </p>
+            <p className="leading-relaxed" style={{ color: "var(--color-muted)" }}>
+              Picture this: you have a bowl, then you add water and various
+              ingredients for a soup. Now you have a soup. <strong>The bowl is
+              space-time</strong>. The water base is <strong>the math that mixes everything
+              together</strong>, and all the other ingredients are just <strong>the other
+              sciences</strong>.
+            </p>
+            <div className="flex justify-center pt-4">
+              <SoupBowl size={80} />
+            </div>
           </div>
         </section>
 
-        <section>
-          <h2
-            className="font-mono text-xl font-bold mb-6 pb-4"
-            style={{
-              color: "var(--color-fg)",
-              borderBottom: "1px solid var(--color-border)",
-            }}
-          >
-            Education
-          </h2>
-          <div className="space-y-6">
-            {education.map((edu) => (
-              <div key={edu.institution} className="grid md:grid-cols-4 gap-4">
-                <div>
-                  <p
-                    className="font-mono text-xs"
-                    style={{ color: "var(--color-muted)" }}
-                  >
-                    {edu.period}
-                  </p>
-                </div>
-                <div className="md:col-span-3">
-                  <a
-                    href={edu.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono font-medium hover:underline"
-                    style={{ color: "var(--color-fg)" }}
-                  >
-                    {edu.institution}
-                  </a>
-                  <p
-                    className="text-sm mt-1"
-                    style={{ color: "var(--color-muted)" }}
-                  >
-                    {edu.detail}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <h2
-            className="font-mono text-xl font-bold mb-6 pb-4"
-            style={{
-              color: "var(--color-fg)",
-              borderBottom: "1px solid var(--color-border)",
-            }}
-          >
-            Soft Skills
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {softSkills.map((s) => (
-              <TechTag key={s} label={s} />
-            ))}
-          </div>
-        </section>
+        {SHOW_NOW && (
+          <section>
+            <p className="mb-4">
+              <CommandPrompt>cat now.txt</CommandPrompt>
+            </p>
+            <ul className="space-y-2 max-w-2xl">
+              {now.map(({ text, href }) => (
+                <li key={text} className="leading-relaxed" style={{ color: "var(--color-muted)" }}>
+                  <span style={{ color: "var(--color-prompt)" }}>{"> "}</span>
+                  <Link href={href} className="hover:underline">
+                    {text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </div>
   );

@@ -19,6 +19,11 @@ export function BlogCard({ post }: BlogCardProps) {
           style={{ color: "var(--color-fg)" }}
         >
           {post.title}
+          {post.draft && (
+            <span className="ml-2 text-xs" style={{ color: "var(--color-prompt)" }}>
+              [draft]
+            </span>
+          )}
         </h3>
         <time
           className="font-mono text-xs shrink-0"

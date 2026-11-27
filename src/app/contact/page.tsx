@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { CommandPrompt } from "@/components/ui/CommandPrompt";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Contact — Ionel-Ștefan Dinu",
+  title: "Contact",
 };
 
 const socials = [
   {
     label: "email",
-    href: "mailto:stefandinu.contact@yahoo.com",
-    display: "stefandinu.contact@yahoo.com",
+    href: `mailto:${CONTACT_EMAIL}`,
+    display: CONTACT_EMAIL,
   },
   {
     label: "github",
@@ -25,6 +26,11 @@ const socials = [
     label: "twitter",
     href: "https://x.com/stefan_d799",
     display: "x.com/stefan_d799",
+  },
+  {
+    label: "instagram",
+    href: "https://www.instagram.com/stefan_d799/",
+    display: "instagram.com/stefan_d799",
   },
   {
     label: "stackoverflow",
@@ -52,8 +58,9 @@ export default function ContactPage() {
         Contact
       </h1>
       <p className="leading-relaxed mb-12" style={{ color: "var(--color-muted)" }}>
-        I&apos;m open to new opportunities, collaborations, or just a good
-        technical conversation. Feel free to reach out through any channel below.
+        If I&apos;m still a thought in your head, you might as well talk back.
+        Opportunities, collaborations, or just a good conversation about absurd
+        ideas. Pick any channel below.
       </p>
       <div className="space-y-0">
         {socials.map(({ label, href, display, download }) => (

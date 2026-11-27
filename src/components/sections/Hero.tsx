@@ -1,11 +1,35 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
 import { TerminalCursor } from "@/components/ui/TerminalCursor";
 import { CommandPrompt } from "@/components/ui/CommandPrompt";
 
+// Quotes shown under the name. With more than one, they rotate every few seconds.
+const quotes = [
+  {
+    text: "There is nothing that even science cannot explain. Searching for a rule to explain that which you can't understand... the tireless effort that walks that straight, steady path... that is what we call science!",
+    source: "Senku Ishigami, Dr. Stone",
+  },
+];
+
+const QUOTE_INTERVAL_MS = 10000;
+
 export function Hero() {
-  const { displayed, done } = useTypingEffect("software developer.", 60);
+  const { displayed, done } = useTypingEffect("systems engineer.", 60);
+  // Start on the first quote so server and client render the same HTML.
+  const [quoteIndex, setQuoteIndex] = useState(0);
+
+  useEffect(() => {
+    if (quotes.length < 2) return;
+    const timer = setInterval(
+      () => setQuoteIndex((i) => (i + 1) % quotes.length),
+      QUOTE_INTERVAL_MS
+    );
+    return () => clearInterval(timer);
+  }, []);
+
+  const quote = quotes[quoteIndex];
 
   return (
     <section className="py-24 md:py-32">
@@ -18,7 +42,7 @@ export function Hero() {
             className="font-mono text-4xl md:text-5xl font-bold mb-3"
             style={{ color: "var(--color-fg)" }}
           >
-            Ștefan Dinu
+            Ștefan D.
           </h1>
           <div
             className="font-mono text-xl"
@@ -28,39 +52,24 @@ export function Hero() {
             {!done && <TerminalCursor />}
           </div>
         </div>
-        <p
-          className="max-w-xl leading-relaxed"
-          style={{ color: "var(--color-muted)" }}
+        <figure
+          key={quoteIndex}
+          className="max-w-xl pl-4"
+          style={{ borderLeft: "2px solid var(--color-border)" }}
         >
-          I believe knowledge is both a tool for success and a responsibility.
-          I&apos;m skilled in software development, system improvement, and
-          building solutions from the ground up.
-        </p>
-        <div className="flex gap-4 pt-2">
-          <a
-            href="https://github.com/stefand799"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-mono text-sm px-4 py-2 transition-colors"
-            style={{
-              border: "1px solid var(--color-border)",
-              color: "var(--color-fg)",
-            }}
+          <blockquote
+            className="italic leading-relaxed"
+            style={{ color: "var(--color-fg)" }}
           >
-            github ↗
-          </a>
-          <a
-            href="mailto:stefandinu.contact@yahoo.com"
-            className="font-mono text-sm px-4 py-2 transition-colors"
-            style={{
-              border: "1px solid var(--color-fg)",
-              backgroundColor: "var(--color-fg)",
-              color: "var(--color-bg)",
-            }}
+            &ldquo;{quote.text}&rdquo;
+          </blockquote>
+          <figcaption
+            className="font-mono text-xs mt-2"
+            style={{ color: "var(--color-muted)" }}
           >
-            contact me
-          </a>
-        </div>
+            — {quote.source}
+          </figcaption>
+        </figure>
       </div>
     </section>
   );
