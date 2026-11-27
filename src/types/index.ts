@@ -17,6 +17,7 @@ export interface BlogPost {
   tags: string[];
   series?: string; // posts with the same value form a series, in date order
   draft?: boolean; // drafts are listed only in development
+  lang?: "en" | "ro"; // language the post is written in (set by the loader)
 }
 
 export interface ResearchItem {

@@ -1,15 +1,16 @@
 import Link from "next/link";
 import type { BlogPost } from "@/types";
-import { formatDate } from "@/lib/utils";
+import { formatDate, localePath, type Locale } from "@/lib/i18n";
 
 interface BlogCardProps {
   post: BlogPost;
+  lang: Locale; // language of the page the card is shown on
 }
 
-export function BlogCard({ post }: BlogCardProps) {
+export function BlogCard({ post, lang }: BlogCardProps) {
   return (
     <Link
-      href={`/blog/${post.slug}`}
+      href={localePath(lang, `/blog/${post.slug}`)}
       className="block p-6 transition-colors"
       style={{ border: "1px solid var(--color-border)" }}
     >
@@ -19,6 +20,11 @@ export function BlogCard({ post }: BlogCardProps) {
           style={{ color: "var(--color-fg)" }}
         >
           {post.title}
+          {post.lang && post.lang !== lang && (
+            <span className="ml-2 text-xs" style={{ color: "var(--color-muted)" }}>
+              [{post.lang}]
+            </span>
+          )}
           {post.draft && (
             <span className="ml-2 text-xs" style={{ color: "var(--color-prompt)" }}>
               [draft]
@@ -29,7 +35,7 @@ export function BlogCard({ post }: BlogCardProps) {
           className="font-mono text-xs shrink-0"
           style={{ color: "var(--color-muted)" }}
         >
-          {formatDate(post.date)}
+          {formatDate(post.date, lang)}
         </time>
       </div>
       <p className="text-sm leading-relaxed" style={{ color: "var(--color-muted)" }}>

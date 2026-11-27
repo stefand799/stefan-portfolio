@@ -4,13 +4,20 @@ import { CommandPrompt } from "@/components/ui/CommandPrompt";
 import { ResearchCard } from "@/components/ui/ResearchCard";
 import { ContentSearch } from "@/components/ui/ContentSearch";
 import { getResearch } from "@/lib/mdx";
+import { notFound } from "next/navigation";
+import { getDictionary, hasLocale, languageAlternates } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "Research",
+  alternates: languageAlternates("/research"),
 };
 
-export default function ResearchPage() {
+export default async function ResearchPage({ params }: PageProps<"/[lang]/research">) {
+  const { lang } = await params;
+  if (!hasLocale(lang)) notFound();
   const items = getResearch();
+  // Research is not translated: its interface stays in English in both languages.
+  const strings = { ...getDictionary("en").search, placeholder: "a theorem, a topic, a word…" };
 
   return (
     <div className="py-16">
@@ -33,12 +40,12 @@ export default function ResearchPage() {
           fallback={
             <div className="space-y-4">
               {items.map((item) => (
-                <ResearchCard key={item.slug} item={item} />
+                <ResearchCard key={item.slug} item={item} lang={lang} />
               ))}
             </div>
           }
         >
-          <ContentSearch kind="research" items={items} />
+          <ContentSearch kind="research" items={items} lang={lang} strings={strings} />
         </Suspense>
       )}
     </div>

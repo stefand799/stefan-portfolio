@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { languageAlternates } from "@/lib/i18n";
 import { CommandPrompt } from "@/components/ui/CommandPrompt";
 
 export const metadata: Metadata = {
   title: "Education",
+  alternates: languageAlternates("/education"),
 };
 
 type EducationLevel = "Highschool" | "Bachelor's Degree" | "Master's Degree";

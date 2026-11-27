@@ -5,19 +5,24 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type MiniSearch from "minisearch";
 import type { BlogPost, ResearchItem, SearchDoc } from "@/types";
 import { buildIndex, snippet } from "@/lib/search";
+import type { Dictionary, Locale } from "@/lib/i18n";
 import { BlogCard } from "./BlogCard";
 import { ResearchCard } from "./ResearchCard";
 
-type Props =
+type Props = (
   | { kind: "blog"; items: BlogPost[] }
-  | { kind: "research"; items: ResearchItem[] };
+  | { kind: "research"; items: ResearchItem[] }
+) & {
+  lang: Locale;
+  strings: Dictionary["search"];
+};
 
 type Hit = { slug: string; terms: string[] };
 
 // Search box + topic filter for a list of blog posts or research items.
 // State lives in the URL (?q=...&tag=...) so a search can be shared as a link.
 export function ContentSearch(props: Props) {
-  const { kind, items } = props;
+  const { kind, items, lang, strings } = props;
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -33,7 +38,7 @@ export function ContentSearch(props: Props) {
   const loadIndex = () => {
     if (index || loading.current) return;
     loading.current = true;
-    fetch(`/${kind}/search-index.json`)
+    fetch(`/${lang}/${kind}/search-index.json`)
       .then((r) => r.json())
       .then((data: SearchDoc[]) => {
         setDocs(new Map(data.map((d) => [d.slug, d])));
@@ -105,7 +110,7 @@ export function ContentSearch(props: Props) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={loadIndex}
-          placeholder={kind === "blog" ? "a topic, an idea, a word…" : "a theorem, a topic, a word…"}
+          placeholder={strings.placeholder}
           aria-label={`Search ${kind}`}
           className="flex-1 bg-transparent outline-none min-w-0"
           style={{ color: "var(--color-fg)" }}
@@ -137,12 +142,13 @@ export function ContentSearch(props: Props) {
 
       {searching && hits === null ? (
         <p className="font-mono text-sm" style={{ color: "var(--color-muted)" }}>
-          searching…
+          {strings.searching}
         </p>
       ) : results.length === 0 ? (
         <p className="font-mono text-sm" style={{ color: "var(--color-muted)" }}>
-          grep: no matches{q ? ` for "${q}"` : ""}
-          {tag ? ` in [${tag}]` : ""}.
+          {strings.noMatches}
+          {q ? ` ${strings.forQuery} "${q}"` : ""}
+          {tag ? ` ${strings.inTag} [${tag}]` : ""}.
         </p>
       ) : (
         <div className="space-y-4">
@@ -153,9 +159,9 @@ export function ContentSearch(props: Props) {
             return (
               <div key={slug}>
                 {kind === "blog" ? (
-                  <BlogCard post={item as BlogPost} />
+                  <BlogCard post={item as BlogPost} lang={lang} />
                 ) : (
-                  <ResearchCard item={item as ResearchItem} />
+                  <ResearchCard item={item as ResearchItem} lang={lang} />
                 )}
                 {piece && (
                   <p

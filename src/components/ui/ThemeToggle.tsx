@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { Dictionary } from "@/lib/i18n";
 
-export function ThemeToggle() {
+export function ThemeToggle({ labels }: { labels: Dictionary["theme"] }) {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
@@ -25,9 +26,9 @@ export function ThemeToggle() {
       onClick={toggle}
       className="font-mono text-xs whitespace-nowrap transition-colors hover:underline"
       style={{ color: "var(--color-muted)" }}
-      aria-label="Toggle theme"
+      aria-label={labels.label}
     >
-      {dark ? "[ light ]" : "[ dark ]"}
+      {dark ? labels.light : labels.dark}
     </button>
   );
 }

@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import type { Project, BlogPost, ResearchItem, SearchDoc } from "@/types";
+import { locales, otherLocale, type Locale } from "@/lib/i18n";
 
 const contentDir = path.join(process.cwd(), "content");
 
@@ -41,16 +42,57 @@ export function getProjects(): Project[] {
   return readFolder<Project>("projects").map((e) => e.meta);
 }
 
-export function getPosts(): BlogPost[] {
-  return readFolder<BlogPost>("blog").map((e) => e.meta);
+// Blog posts live in content/blog/<lang>/<slug>.mdx. A post can exist in one
+// language or both; on a page in `lang`, a post written only in the other
+// language is still listed, in its own language (post.lang tells which).
+function readBlog(lang: Locale): Entry<BlogPost>[] {
+  const own = readFolder<BlogPost>(`blog/${lang}`).map((e) => ({
+    ...e,
+    meta: { ...e.meta, lang },
+  }));
+  const ownSlugs = new Set(own.map((e) => e.meta.slug));
+  const other = otherLocale(lang);
+  const fallback = readFolder<BlogPost>(`blog/${other}`)
+    .filter((e) => !ownSlugs.has(e.meta.slug))
+    .map((e) => ({ ...e, meta: { ...e.meta, lang: other } }));
+  return [...own, ...fallback].sort(
+    (a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime()
+  );
+}
+
+export function getPosts(lang: Locale): BlogPost[] {
+  return readBlog(lang).map((e) => e.meta);
+}
+
+// Every slug that exists in any language (for static generation).
+export function getPostSlugs(): string[] {
+  const slugs = new Set<string>();
+  for (const lang of locales) for (const e of readFolder<BlogPost>(`blog/${lang}`)) slugs.add(e.meta.slug);
+  return [...slugs];
 }
 
 export function getResearch(): ResearchItem[] {
   return readFolder<ResearchItem>("research").map((e) => e.meta);
 }
 
-export function getPostBySlug(slug: string): { frontmatter: BlogPost; content: string } {
-  return readOne<BlogPost>("blog", slug);
+// The post in `lang` if it exists, otherwise in the other language.
+// `languages` lists every language the post is written in.
+export function getPostBySlug(
+  slug: string,
+  lang: Locale
+): { frontmatter: BlogPost; content: string; languages: Locale[] } {
+  const languages = locales.filter((l) => {
+    try {
+      readOne<BlogPost>(`blog/${l}`, slug);
+      return true;
+    } catch {
+      return false;
+    }
+  });
+  if (languages.length === 0) throw new Error(`blog/${slug} not found`);
+  const shown = languages.includes(lang) ? lang : languages[0];
+  const { frontmatter, content } = readOne<BlogPost>(`blog/${shown}`, slug);
+  return { frontmatter: { ...frontmatter, lang: shown }, content, languages };
 }
 
 export function getResearchBySlug(slug: string): { frontmatter: ResearchItem; content: string } {
@@ -58,8 +100,8 @@ export function getResearchBySlug(slug: string): { frontmatter: ResearchItem; co
 }
 
 // Posts of a series, oldest first (reading order).
-export function getSeries(series: string): BlogPost[] {
-  return getPosts()
+export function getSeries(series: string, lang: Locale): BlogPost[] {
+  return getPosts(lang)
     .filter((p) => p.series === series)
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 }
@@ -79,8 +121,10 @@ function toPlainText(mdx: string): string {
     .trim();
 }
 
-export function getSearchDocs(folder: "blog" | "research"): SearchDoc[] {
-  return readFolder<BlogPost | ResearchItem>(folder).map(({ meta, content }) => ({
+export function getSearchDocs(folder: "blog" | "research", lang: Locale): SearchDoc[] {
+  const entries: Entry<BlogPost | ResearchItem>[] =
+    folder === "blog" ? readBlog(lang) : readFolder<ResearchItem>("research");
+  return entries.map(({ meta, content }) => ({
     slug: meta.slug,
     title: meta.title,
     description: meta.description ?? "",

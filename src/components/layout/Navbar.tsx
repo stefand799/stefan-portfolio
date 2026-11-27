@@ -4,20 +4,23 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { LanguageSwitch } from "@/components/ui/LanguageSwitch";
+import { localePath, type Dictionary, type Locale } from "@/lib/i18n";
 
-const links = [
-  { href: "/about", label: "about" },
-  { href: "/blog", label: "blog" },
-  { href: "/research", label: "research" },
-  { href: "/projects", label: "projects" },
-  { href: "/experience", label: "experience" },
-  { href: "/education", label: "education" },
-  { href: "/contact", label: "contact" },
-];
+const pages = ["about", "blog", "research", "projects", "experience", "education", "contact"] as const;
 
-export function Navbar() {
+interface NavbarProps {
+  lang: Locale;
+  labels: Dictionary["nav"];
+  theme: Dictionary["theme"];
+  menu: Dictionary["menu"];
+  switchTo: string;
+}
+
+export function Navbar({ lang, labels, theme, menu, switchTo }: NavbarProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const links = pages.map((p) => ({ href: localePath(lang, `/${p}`), label: labels[p] }));
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
@@ -34,9 +37,9 @@ export function Navbar() {
         borderBottom: "1px solid var(--color-border)",
       }}
     >
-      <nav className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
+      <nav className="max-w-3xl lg:max-w-4xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
         <Link
-          href="/"
+          href={localePath(lang, "/")}
           className="font-mono text-sm font-medium whitespace-nowrap"
           onClick={() => setOpen(false)}
         >
@@ -44,8 +47,8 @@ export function Navbar() {
           <span style={{ color: "var(--color-fg)" }}>stefan</span>
         </Link>
 
-        {/* Desktop: one row of links */}
-        <div className="hidden md:flex items-center gap-5">
+        {/* Wide screens (≥1024px): one row of links */}
+        <div className="hidden lg:flex items-center gap-5">
           <ul className="flex gap-4">
             {links.map(({ href, label }) => (
               <li key={href}>
@@ -59,12 +62,14 @@ export function Navbar() {
               </li>
             ))}
           </ul>
-          <ThemeToggle />
+          <ThemeToggle labels={theme} />
+          <LanguageSwitch lang={lang} title={switchTo} />
         </div>
 
-        {/* Mobile: theme toggle + menu button */}
-        <div className="flex md:hidden items-center gap-4">
-          <ThemeToggle />
+        {/* Narrower screens: theme, language and a menu button */}
+        <div className="flex lg:hidden items-center gap-4">
+          <ThemeToggle labels={theme} />
+          <LanguageSwitch lang={lang} title={switchTo} />
           <button
             onClick={() => setOpen((o) => !o)}
             className="font-mono text-xs whitespace-nowrap hover:underline"
@@ -72,16 +77,16 @@ export function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-nav"
           >
-            {open ? "[ close ]" : "[ menu ]"}
+            {open ? menu.close : menu.open}
           </button>
         </div>
       </nav>
 
-      {/* Mobile: dropdown list */}
+      {/* Narrower screens: dropdown list */}
       {open && (
         <ul
           id="mobile-nav"
-          className="md:hidden max-w-3xl mx-auto px-6 pb-4 space-y-3"
+          className="lg:hidden max-w-3xl mx-auto px-6 pb-4 space-y-3"
         >
           {links.map(({ href, label }) => (
             <li key={href}>

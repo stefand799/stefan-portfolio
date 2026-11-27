@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { TechTag } from "./TechTag";
 import type { ResearchItem } from "@/types";
+import { localePath, type Locale } from "@/lib/i18n";
 
 interface ResearchCardProps {
   item: ResearchItem;
+  lang: Locale;
 }
 
 const linkClass = "font-mono text-xs transition-colors hover:underline";
 const linkStyle = { color: "var(--color-muted)" };
 
-export function ResearchCard({ item }: ResearchCardProps) {
+export function ResearchCard({ item, lang }: ResearchCardProps) {
   return (
     <article
       className="p-6 transition-colors"
@@ -29,7 +31,7 @@ export function ResearchCard({ item }: ResearchCardProps) {
             className="font-mono font-medium"
             style={{ color: "var(--color-fg)" }}
           >
-            <Link href={`/research/${item.slug}`} className="hover:underline">
+            <Link href={localePath(lang, `/research/${item.slug}`)} className="hover:underline">
               {item.title}
             </Link>
             {item.draft && (
@@ -41,7 +43,7 @@ export function ResearchCard({ item }: ResearchCardProps) {
         </div>
         <div className="flex gap-3 shrink-0">
           {item.blog && (
-            <Link href={`/blog/${item.blog}`} className={linkClass} style={linkStyle}>
+            <Link href={localePath(lang, `/blog/${item.blog}`)} className={linkClass} style={linkStyle}>
               hypothesis →
             </Link>
           )}

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { languageAlternates } from "@/lib/i18n";
 import { CommandPrompt } from "@/components/ui/CommandPrompt";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { getProjects } from "@/lib/mdx";
 
 export const metadata: Metadata = {
   title: "Projects",
+  alternates: languageAlternates("/projects"),
 };
 
 export default function ProjectsPage() {

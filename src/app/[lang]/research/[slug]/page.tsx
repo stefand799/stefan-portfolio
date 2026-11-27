@@ -6,12 +6,10 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { getResearch, getResearchBySlug } from "@/lib/mdx";
-import { formatDate } from "@/lib/utils";
+import { formatDate, hasLocale, languageAlternates, localePath } from "@/lib/i18n";
 import { TechTag } from "@/components/ui/TechTag";
 
-interface Props {
-  params: Promise<{ slug: string }>;
-}
+type Props = PageProps<"/[lang]/research/[slug]">;
 
 // Only slugs that exist in content/research/ are served; anything else is a 404.
 export const dynamicParams = false;
@@ -24,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   try {
     const { frontmatter } = getResearchBySlug(slug);
-    return { title: frontmatter.title };
+    return { title: frontmatter.title, alternates: languageAlternates(`/research/${slug}`) };
   } catch {
     return { title: "Research not found" };
   }
@@ -34,7 +32,8 @@ const linkClass = "font-mono text-sm hover:underline";
 const linkStyle = { color: "var(--color-muted)" };
 
 export default async function ResearchDetailPage({ params }: Props) {
-  const { slug } = await params;
+  const { lang, slug } = await params;
+  if (!hasLocale(lang)) notFound();
 
   let item;
   try {
@@ -48,7 +47,7 @@ export default async function ResearchDetailPage({ params }: Props) {
     <article className="py-16 max-w-2xl">
       <header className="mb-12">
         <p className="mb-6">
-          <Link href="/research" className={linkClass} style={linkStyle}>
+          <Link href={localePath(lang, "/research")} className={linkClass} style={linkStyle}>
             ← research/
           </Link>
         </p>
@@ -71,11 +70,11 @@ export default async function ResearchDetailPage({ params }: Props) {
             className="font-mono text-sm"
             style={{ color: "var(--color-muted)" }}
           >
-            {formatDate(frontmatter.date)}
+            {formatDate(frontmatter.date, "en")}
           </time>
           {frontmatter.blog && (
             <Link
-              href={`/blog/${frontmatter.blog}`}
+              href={localePath(lang, `/blog/${frontmatter.blog}`)}
               className={linkClass}
               style={linkStyle}
             >

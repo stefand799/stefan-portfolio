@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { languageAlternates } from "@/lib/i18n";
 import { CommandPrompt } from "@/components/ui/CommandPrompt";
 import { CONTACT_EMAIL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
+  alternates: languageAlternates("/contact"),
 };
 
 const socials = [

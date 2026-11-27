@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { languageAlternates } from "@/lib/i18n";
 import { CommandPrompt } from "@/components/ui/CommandPrompt";
 import { TechTag } from "@/components/ui/TechTag";
 
 export const metadata: Metadata = {
   title: "Experience",
+  alternates: languageAlternates("/experience"),
 };
 
 type ExperienceEntry = {

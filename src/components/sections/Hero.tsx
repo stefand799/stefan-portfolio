@@ -4,19 +4,35 @@ import { useEffect, useState } from "react";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
 import { TerminalCursor } from "@/components/ui/TerminalCursor";
 import { CommandPrompt } from "@/components/ui/CommandPrompt";
+import type { Locale } from "@/lib/i18n";
 
-// Quotes shown under the name. With more than one, they rotate every few seconds.
-const quotes = [
-  {
-    text: "There is nothing that even science cannot explain. Searching for a rule to explain that which you can't understand... the tireless effort that walks that straight, steady path... that is what we call science!",
-    source: "Senku Ishigami, Dr. Stone",
-  },
-];
+// Subtitle typed under the name, per language.
+const subtitle: Record<Locale, string> = {
+  en: "systems engineer.",
+  ro: "inginer de sisteme.",
+};
+
+// Quotes shown under the name, per language. With more than one, they rotate every few seconds.
+const quotesByLang: Record<Locale, { text: string; source: string }[]> = {
+  en: [
+    {
+      text: "There is nothing that even science cannot explain. Searching for a rule to explain that which you can't understand... the tireless effort that walks that straight, steady path... that is what we call science!",
+      source: "Senku Ishigami, Dr. Stone",
+    },
+  ],
+  ro: [
+    {
+      text: "Nu există nimic pe care știința să nu-l poată explica. Să cauți o regulă care să explice ceea ce nu înțelegi... efortul neobosit de a merge pe acel drum drept și constant... asta numim noi știință!",
+      source: "Senku Ishigami, Dr. Stone",
+    },
+  ],
+};
 
 const QUOTE_INTERVAL_MS = 10000;
 
-export function Hero() {
-  const { displayed, done } = useTypingEffect("systems engineer.", 60);
+export function Hero({ lang }: { lang: Locale }) {
+  const quotes = quotesByLang[lang];
+  const { displayed, done } = useTypingEffect(subtitle[lang], 60);
   // Start on the first quote so server and client render the same HTML.
   const [quoteIndex, setQuoteIndex] = useState(0);
 
@@ -27,7 +43,7 @@ export function Hero() {
       QUOTE_INTERVAL_MS
     );
     return () => clearInterval(timer);
-  }, []);
+  }, [quotes.length]);
 
   const quote = quotes[quoteIndex];
 
