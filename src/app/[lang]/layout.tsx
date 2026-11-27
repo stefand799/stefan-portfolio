@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JetBrains_Mono, DM_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "../globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -84,6 +85,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
         <div className="max-w-3xl mx-auto px-6">
           <Footer />
         </div>
+        <Analytics />
       </body>
     </html>
   );
